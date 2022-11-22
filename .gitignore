@@ -7,3 +7,4 @@
 /.env
 /vendor/
 /docker/mysql/data/
+/node_modules/
