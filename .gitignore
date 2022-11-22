@@ -1,0 +1,9 @@
+/.idea/.gitignore
+/.idea/modules.xml
+/.idea/php.xml
+/.idea/testTask.iml
+/.idea/vcs.xml
+/vendor/
+/.env
+/vendor/
+/docker/mysql/data/

@@ -1,0 +1,69 @@
+version: '3'
+services:
+
+    #PHP Service
+    app:
+        build:
+            context: .
+            dockerfile: docker/php/Dockerfile
+        image: digitalocean.com/php
+        container_name: app
+        restart: unless-stopped
+        tty: true
+        environment:
+            SERVICE_NAME: app
+            SERVICE_TAGS: dev
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+            - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        networks:
+            - web-jest
+
+    #Nginx Service
+    nginxserver:
+        image: nginx:alpine
+        container_name: nginxserver
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+        networks:
+            - web-jest
+
+    #MySQL Service
+    db:
+        image: mysql:8
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=conference
+        volumes:
+            - './docker/mysql/data:/var/lib/mysql/'
+        networks:
+            - web-jest
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        restart: always
+        environment:
+             PMA_HOST: db
+             PMA_USER: root
+             PMA_PASSWORD: root
+        ports:
+            - "8080:80"
+        networks:
+            - web-jest
+
+#Docker Networks
+networks:
+    web-jest:
+        driver: bridge
+
+#Volumes
+volumes:
+    dbdata:
+        driver: local
