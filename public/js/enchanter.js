@@ -89,3 +89,5 @@ class Enchanter {
     }
 }
 //# sourceMappingURL=enchanter.js.map
+
+module.exports = Enchanter
