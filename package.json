@@ -13,6 +13,10 @@
   "author": "Alexey Kustov",
   "license": "ISC",
   "devDependencies": {
-    "jest": "^29.3.1"
+    "jest": "^29.3.1",
+    "jest-environment-jsdom": "^29.3.1"
+  },
+  "dependencies": {
+    "jquery": "^3.6.1"
   }
 }

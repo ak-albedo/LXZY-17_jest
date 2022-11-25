@@ -1,3 +1,4 @@
+const $ = require('jquery');
 var storage = window.localStorage;
 var step = 1;
 var errorFields = [];
@@ -172,3 +173,5 @@ function checkPartOfForm() {
 
     userValidateField("country", $("#country").val());
 }
+
+module.exports = { phoneMask }
