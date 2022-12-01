@@ -174,4 +174,4 @@ function checkPartOfForm() {
     userValidateField("country", $("#country").val());
 }
 
-module.exports = { phoneMask }
+module.exports = { phoneMask, userValidateField }
