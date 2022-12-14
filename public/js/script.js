@@ -1,5 +1,5 @@
-// const $ = require('jquery');
-// const axios = require("axios");
+const $ = require('jquery');
+const axios = require("axios");
 var storage = window.localStorage;
 var step = 1;
 var errorFields = [];
@@ -175,4 +175,4 @@ function checkPartOfForm() {
     userValidateField("country", $("#country").val());
 }
 
-module.exports = { phoneMask, userValidateField }
+module.exports = { phoneMask, userValidateField, contains }

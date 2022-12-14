@@ -6,7 +6,7 @@ const $ = require('jquery');
 const axios = require("axios");
 jest.mock('axios');
 
-const { phoneMask, userValidateField } = require('../script');
+const { phoneMask, userValidateField, contains } = require('../script');
 
 describe('Test phoneMask function:', () => {
     test('correct value format', () => {
@@ -28,17 +28,37 @@ describe('Test userValidateField function:', () => {
 
     beforeEach(() => {
         todos = "Test message"
-
-        response = {
-            data: todos
-        }
+        response = {data: todos};
     })
 
-    test('test', () => {
-        axios.post.mockReturnValue(response);
+    test('Error has to be showed', () => {
+        let field = "first_name";
+        document.body.innerHTML =
+            '<div className="mb-3">' +
+                '<input type="text" name="first_name" className="form-control" id="first_name" required="">' +
+                    '<div className="validation-error" id="first_name-error"></div>' +
+            '</div>';
+        window.errorFields = [];
 
-        return userValidateField().then(data => {
-            expect(data).toEqual(todos)
+        axios.post.mockResolvedValue(response);
+
+        return userValidateField(field, "test4").then(data => {
+            expect(data).toEqual(todos);
+            expect(window.errorFields.length).toBe(1);
+            expect($("#" + field + "-error").html()).toBe(todos);
+            expect($("#" + field).attr("aria-invalid")).toBe("true");
+            expect($("#" + field).hasClass('is-invalid')).toBe(true);
         });
     });
+});
+
+describe('Test contains function:', () => {
+    test('check', () => {
+        const arr = ["test1", "test2", "test3"];
+        const result = contains(arr, "test3");
+        const result2 = contains(arr, "test4");
+
+        expect(result).toBe(true);
+        expect(result2).toBe(false);
+    })
 });
