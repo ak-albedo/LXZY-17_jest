@@ -1,4 +1,5 @@
-const $ = require('jquery');
+// const $ = require('jquery');
+// const axios = require("axios");
 var storage = window.localStorage;
 var step = 1;
 var errorFields = [];
@@ -55,37 +56,37 @@ $("#birthday").change(function () {
     userValidateField(field, value);
 });
 
-function userValidateField(field, value) {
-    $.ajax({
-        type: 'POST',
-        url: '/validate-field',
-        enctype: 'multipart/form-data',
-        data: {
-            'field': field,
-            'value': value
-        },
-        success: function (response) {
-            if (response) {
-                var validateError = $.parseJSON(response);
-                $("#" + field + "-error").html(validateError);
-                $("#" + field).addClass('is-invalid');
-                $("#" + field).attr("aria-invalid", "true");
-
-                if (!contains(window.errorFields, field)) {
-                    window.errorFields[window.errorFields.length] = field;
-                }
-            } else {
-                $("#" + field + "-error").html("");
-                $("#" + field).removeClass('is-invalid');
-                $("#" + field).attr("aria-invalid", "false");
-
-                var elementIndex = window.errorFields.indexOf(field);
-                if (elementIndex !== -1) {
-                    window.errorFields.splice(elementIndex, 1);
-                }
-            }
-        }
+async function userValidateField(field, value) {
+    let result = await axios.post("http://localhost/validate-field", {
+        'field': field,
+        'value': value
+    }, {
+        headers: { "Content-Type": "multipart/form-data" }
+    }).then((response) => {
+        return response.data;
     });
+
+    if (result) {
+        let validateError = result;
+        $("#" + field + "-error").html(validateError);
+        $("#" + field).addClass('is-invalid');
+        $("#" + field).attr("aria-invalid", "true");
+
+        if (!contains(window.errorFields, field)) {
+            window.errorFields[window.errorFields.length] = field;
+        }
+    } else {
+        $("#" + field + "-error").html("");
+        $("#" + field).removeClass('is-invalid');
+        $("#" + field).attr("aria-invalid", "false");
+
+        var elementIndex = window.errorFields.indexOf(field);
+        if (elementIndex !== -1) {
+            window.errorFields.splice(elementIndex, 1);
+        }
+    }
+
+    return result;
 }
 
 $("#next").click(function () {

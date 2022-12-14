@@ -3,6 +3,9 @@
  */
 
 const $ = require('jquery');
+const axios = require("axios");
+jest.mock('axios');
+
 const { phoneMask, userValidateField } = require('../script');
 
 describe('Test phoneMask function:', () => {
@@ -20,18 +23,22 @@ describe('Test phoneMask function:', () => {
 });
 
 describe('Test userValidateField function:', () => {
+    let response;
+    let todos;
+
     beforeEach(() => {
-        $.ajax = jest.fn().mockImplementation(() => {
-            const fakeResponse = {
-                id: 1,
-                name: "All",
-                value: "Dummy Data"
-            };
-            return Promise.resolve(fakeResponse);
+        todos = "Test message"
+
+        response = {
+            data: todos
+        }
+    })
+
+    test('test', () => {
+        axios.post.mockReturnValue(response);
+
+        return userValidateField().then(data => {
+            expect(data).toEqual(todos)
         });
-    })
-
-    test('', () => {
-
-    })
+    });
 });
